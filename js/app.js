@@ -98,18 +98,18 @@
     const f = S.form;
     const sup = '<datalist id="suppliers">' + S.settings.suppliers.map(function (s) { return '<option value="' + esc(s) + '">'; }).join('') + '</datalist>';
     const silos = '<option value="">—</option>' + S.settings.silos.map(function (s) { return '<option ' + (f.silo === s.id ? 'selected' : '') + '>' + esc(s.id) + '</option>'; }).join('');
-    let h = '<form id="lotform" class="card stack" autocomplete="off">';
+    let h = '<form id="lotform" class="card stack" autocomplete="off" novalidate>';
     h += '<h2>' + esc(t('new_lot')) + ' · <span class="mono">' + esc(L.lotCode(f.date || L.today(), S.lots)) + '</span></h2>';
     h += seg('cereal', [['Trigo', t('wheat')], ['Milho', t('maize')]]);
     h += '<div class="grid2">' + field('date', t('date'), 'date') + field('time', t('time'), 'time') + '</div>';
     h += '<label>' + esc(t('supplier')) + '<input name="supplier" list="suppliers" value="' + esc(f.supplier) + '"></label>' + sup;
     h += '<div class="grid2">' + field('guia', t('guia')) + field('plate', t('plate')) + '</div>';
-    h += '<div class="grid2">' + field('origin', t('origin')) + field('kg', t('net_kg'), 'number', ' inputmode="decimal" step="any"') + '</div>';
-    h += '<div class="grid2">' + field('hum', t('moisture'), 'number', ' inputmode="decimal" step="any"') + field('imp', t('impurities'), 'number', ' inputmode="decimal" step="any"') + '</div>';
+    h += '<div class="grid2">' + field('origin', t('origin')) + field('kg', t('net_kg'), 'text', ' inputmode="decimal"') + '</div>';
+    h += '<div class="grid2">' + field('hum', t('moisture'), 'text', ' inputmode=\"decimal\"') + field('imp', t('impurities'), 'text', ' inputmode=\"decimal\"') + '</div>';
     h += '<div class="lbl">' + esc(t('live_insects')) + '</div>' + seg('ins', [['N', t('no')], ['S', t('yes')]]);
     h += '<div class="lbl">' + esc(t('odour')) + '</div>' + seg('odor', [['Normal', t('normal')], ['Anormal', t('abnormal')]]);
-    h += '<div class="grid2">' + field('afla', t('afla'), 'number', ' inputmode="decimal" step="any"') + field('don', t('don'), 'number', ' inputmode="decimal" step="any"') + '</div>';
-    h += field('fum', t('fum'), 'number', ' inputmode="decimal" step="any"');
+    h += '<div class="grid2">' + field('afla', t('afla'), 'text', ' inputmode=\"decimal\"') + field('don', t('don'), 'text', ' inputmode=\"decimal\"') + '</div>';
+    h += field('fum', t('fum'), 'text', ' inputmode=\"decimal\"');
     h += '<div id="decision"></div>';
     h += '<label>' + esc(t('final_decision')) + '<select name="final"><option value="">—</option>' +
       ['ACCEPTED', 'HELD', 'REJECTED'].map(function (s) { return '<option value="' + s + '" ' + (f.final === s ? 'selected' : '') + '>' + esc(t('st_' + s)) + '</option>'; }).join('') + '</select></label>';
@@ -194,7 +194,7 @@
     if (!S.sheet) { el.hidden = true; el.innerHTML = ''; return; }
     el.hidden = false;
     const sh = S.sheet;
-    let h = '<form class="sheet-card stack" id="sheetform"><h2>';
+    let h = '<form class="sheet-card stack" id="sheetform" novalidate><h2>';
     if (sh.kind === 'out') h += esc(t('act_out')) + ' · ' + esc(sh.silo);
     if (sh.kind === 'transfer') h += esc(t('act_transfer')) + ' · ' + esc(sh.silo);
     if (sh.kind === 'empty') h += esc(t('act_empty')) + ' · ' + esc(sh.silo);
@@ -202,12 +202,12 @@
     h += '</h2>';
     const now = '<div class="grid2"><label>' + esc(t('date')) + '<input name="date" type="date" value="' + L.today() + '"></label><label>' + esc(t('time')) + '<input name="time" type="time" value="' + L.nowTime() + '"></label></div>';
     if (sh.kind === 'out') {
-      h += now + '<label>' + esc(t('to_line')) + '<input name="place" required></label><label>' + esc(t('kg')) + '<input name="kg" type="number" step="any" inputmode="decimal"></label>' +
+      h += now + '<label>' + esc(t('to_line')) + '<input name="place" required></label><label>' + esc(t('kg')) + '<input name="kg" type="text" inputmode="decimal"></label>' +
         '<label>' + esc(t('prod_lot')) + '<input name="prodLot"></label>';
     }
     if (sh.kind === 'transfer') {
       const opts = S.settings.silos.filter(function (s) { return s.id !== sh.silo; }).map(function (s) { return '<option>' + esc(s.id) + '</option>'; }).join('');
-      h += now + '<label>' + esc(t('to_silo')) + '<select name="toSilo" required>' + opts + '</select></label><label>' + esc(t('kg')) + '<input name="kg" type="number" step="any" inputmode="decimal"></label>';
+      h += now + '<label>' + esc(t('to_silo')) + '<select name="toSilo" required>' + opts + '</select></label><label>' + esc(t('kg')) + '<input name="kg" type="text" inputmode="decimal"></label>';
     }
     if (sh.kind === 'empty') h += now + '<p class="warn">' + esc(t('confirm_empty')) + '</p>';
     if (sh.kind === 'held') {
@@ -234,6 +234,7 @@
       p = Promise.all(ops);
     } else {
       const ev = { date: v.date, time: v.time, silo: sh.silo, operator: v.operator || '', notes: '' };
+      if (sh.kind === 'out' && !(v.place || '').trim()) { toast(t('to_line')); return; }
       if (sh.kind === 'out') Object.assign(ev, { type: 'OUT', kg: L.num(v.kg), place: v.place, prodLot: v.prodLot, lots: L.siloContents(sh.silo, S.events).lots });
       if (sh.kind === 'transfer') Object.assign(ev, { type: 'TRANSFER', toSilo: v.toSilo, kg: L.num(v.kg), lots: L.lotsCarried(sh.silo, S.events) });
       if (sh.kind === 'empty') Object.assign(ev, { type: 'EMPTY', kg: null, lots: [] });
@@ -301,11 +302,11 @@
   // ---------------- definições / settings ----------------
   function settingsView() {
     const s = S.settings;
-    let h = '<form id="settingsform" class="stack">';
+    let h = '<form id="settingsform" class="stack" novalidate>';
     h += '<div class="card stack"><label>' + esc(t('mill_name')) + '<input name="millName" value="' + esc(s.millName) + '"></label><label>' + esc(t('site')) + '<input name="site" value="' + esc(s.site) + '"></label>' +
       '<label>' + esc(t('language')) + '<select name="lang"><option value="pt" ' + (s.lang === 'pt' ? 'selected' : '') + '>Português</option><option value="en" ' + (s.lang === 'en' ? 'selected' : '') + '>English</option></select></label></div>';
     h += '<div class="card stack"><h2>' + esc(t('silos_cfg')) + '</h2>' + s.silos.map(function (x, i) {
-      return '<div class="grid3b"><input aria-label="' + esc(t('silo_id')) + '" name="silo_id_' + i + '" value="' + esc(x.id) + '"><input aria-label="' + esc(t('silo_cap')) + '" placeholder="' + esc(t('silo_cap')) + '" name="silo_cap_' + i + '" type="number" step="any" value="' + esc(x.cap) + '"><button type="button" class="btn small" data-action="rm-silo" data-i="' + i + '">' + esc(t('remove')) + '</button></div>';
+      return '<div class="grid3b"><input aria-label="' + esc(t('silo_id')) + '" name="silo_id_' + i + '" value="' + esc(x.id) + '"><input aria-label="' + esc(t('silo_cap')) + '" placeholder="' + esc(t('silo_cap')) + '" name="silo_cap_' + i + '" type="text" inputmode="decimal" value="' + esc(x.cap) + '"><button type="button" class="btn small" data-action="rm-silo" data-i="' + i + '">' + esc(t('remove')) + '</button></div>';
     }).join('') + '<button type="button" class="btn small" data-action="add-silo">+ ' + esc(t('add_silo')) + '</button></div>';
     h += '<div class="card stack"><h2>' + esc(t('suppliers_cfg')) + '</h2>' + s.suppliers.map(function (x, i) {
       return '<div class="grid2b"><input name="sup_' + i + '" value="' + esc(x) + '"><button type="button" class="btn small" data-action="rm-sup" data-i="' + i + '">' + esc(t('remove')) + '</button></div>';
@@ -315,7 +316,7 @@
       const lim = s.limits[c];
       h += '<h3>' + esc(c === 'Trigo' ? t('wheat') : t('maize')) + '</h3><div class="grid2">';
       [['hum', 'moisture'], ['imp', 'impurities'], ['afla', 'afla'], ['don', 'don'], ['fum', 'fum']].forEach(function (k) {
-        h += '<label>' + esc(t(k[1])) + '<input name="lim_' + c + '_' + k[0] + '" type="number" step="any" inputmode="decimal" value="' + esc(lim[k[0]]) + '">' +
+        h += '<label>' + esc(t(k[1])) + '<input name="lim_' + c + '_' + k[0] + '" type="text" inputmode="decimal" value="' + esc(lim[k[0]]) + '">' +
           (['afla', 'don', 'fum'].indexOf(k[0]) >= 0 ? '<span class="check"><input type="checkbox" name="req_' + c + '_' + k[0] + '" ' + (lim[k[0] + 'Required'] ? 'checked' : '') + '> ' + esc(t('required_test')) + '</span>' : '') + '</label>';
       });
       h += '</div>';
@@ -373,6 +374,10 @@
       if (e.target.name === 'final') S.form._finalTouched = true;
     }
     if (e.target.id === 'restore') restore(e.target.files[0]);
+    if (e.target.name === 'lang' && e.target.form && e.target.form.id === 'settingsform') {
+      readSettingsForm(e.target.form); I18n.set(S.settings.lang);
+      saveSettings().then(function () { render(); toast(t('settings_saved')); });
+    }
   });
   document.addEventListener('submit', function (e) {
     e.preventDefault();

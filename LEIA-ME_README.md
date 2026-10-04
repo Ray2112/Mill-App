@@ -1,4 +1,4 @@
-# Moagem — Registos (v0.1.0, Fase A)
+# Moagem — Registos (v0.1.1, Fase A)
 
 Aplicação para telemóvel, sem servidor, para **recepção de cereal (RG-21)** e **registo de silos e lotes (RG-13)** numa moagem. Funciona sem rede depois da primeira abertura. Os dados ficam **apenas no telemóvel**.
 
@@ -44,7 +44,7 @@ Altere `const CACHE = 'moagem-v0.1.0'` em `sw.js` (por exemplo para `v0.1.1`) e 
 
 ---
 
-# Mill — Records (v0.1.0, Step A) — English
+# Mill — Records (v0.1.1, Step A) — English
 
 A serverless phone app for **grain intake (RG-21)** and **silo and lot records (RG-13)**. It works offline after the first load. Data stays **on the phone only**.
 

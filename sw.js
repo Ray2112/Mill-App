@@ -1,6 +1,6 @@
 /* Service worker: guarda a aplicação no telemóvel para funcionar sem rede.
    Alterar CACHE quando publicar uma nova versão. / Bump CACHE on each release. */
-const CACHE = 'moagem-v0.1.0';
+const CACHE = 'moagem-v0.1.1';
 const FILES = [
   './', './index.html', './manifest.webmanifest', './css/styles.css',
   './js/i18n.js', './js/logic.js', './js/db.js', './js/app.js', './vendor/xlsx.mini.min.js',
@@ -14,8 +14,12 @@ self.addEventListener('activate', function (e) {
     return Promise.all(keys.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); }));
   }).then(function () { return self.clients.claim(); }));
 });
-// Primeiro a cópia local; se não existir, a rede. / Cache first, then network.
+// Primeiro a rede (para receber actualizações); sem rede, a cópia local.
+// Network first (so updates arrive); offline, the local copy.
 self.addEventListener('fetch', function (e) {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request, { ignoreSearch: true }).then(function (r) { return r || fetch(e.request); }));
+  if (e.request.method !== 'GET' || new URL(e.request.url).origin !== location.origin) return;
+  e.respondWith(fetch(e.request).then(function (r) {
+    if (r && r.ok) { const copy = r.clone(); caches.open(CACHE).then(function (c) { c.put(e.request, copy); }); }
+    return r;
+  }).catch(function () { return caches.match(e.request, { ignoreSearch: true }); }));
 });
