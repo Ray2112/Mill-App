@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1D2125">
+<title>Moagem — Registos</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header>
+  <div class="row"><span id="mill" class="caps small grow"></span><span id="badge" class="pill"></span></div>
+  <h1 id="title"></h1>
+</header>
+<main id="main" tabindex="-1"></main>
+<p id="footer" class="small muted center"></p>
+<nav>
+  <button data-action="tab" data-tab="intake"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h13v10H3zM16 10h3l2 3v4h-5M7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg><span></span></button>
+  <button data-action="tab" data-tab="silos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v14l-6 4-6-4zM6 9h12M6 13h12"/></svg><span></span></button>
+  <button data-action="tab" data-tab="export"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg><span></span></button>
+  <button data-action="tab" data-tab="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span></span></button>
+</nav>
+<div id="sheet" class="sheet" hidden></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="vendor/xlsx.mini.min.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/logic.js"></script>
+<script src="js/db.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

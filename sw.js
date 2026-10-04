@@ -1,0 +1,21 @@
+/* Service worker: guarda a aplicação no telemóvel para funcionar sem rede.
+   Alterar CACHE quando publicar uma nova versão. / Bump CACHE on each release. */
+const CACHE = 'moagem-v0.1.0';
+const FILES = [
+  './', './index.html', './manifest.webmanifest', './css/styles.css',
+  './js/i18n.js', './js/logic.js', './js/db.js', './js/app.js', './vendor/xlsx.mini.min.js',
+  './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'
+];
+self.addEventListener('install', function (e) {
+  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
+});
+self.addEventListener('activate', function (e) {
+  e.waitUntil(caches.keys().then(function (keys) {
+    return Promise.all(keys.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); }));
+  }).then(function () { return self.clients.claim(); }));
+});
+// Primeiro a cópia local; se não existir, a rede. / Cache first, then network.
+self.addEventListener('fetch', function (e) {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(caches.match(e.request, { ignoreSearch: true }).then(function (r) { return r || fetch(e.request); }));
+});
