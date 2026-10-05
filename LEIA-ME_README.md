@@ -12,7 +12,8 @@ Aplicação para telemóvel, sem servidor, para **recepção de cereal (RG-21)**
 - **Silos designados** (cereal, cor, grau) e com capacidade. A aplicação mostra os silos livres para o grau do lote; um lote maior do que o espaço livre reparte-se pelos silos escolhidos, por ordem. Silo cheio não recebe. Amarelo e Branco nunca se misturam.
 - **PIN do supervisor** para: alterar limites e silos, aceitar fora de grau, usar silo de grau diferente (com nome e motivo registados) e restaurar cópias. Rejeitar não tem excepção.
 - **Descarga** por ordem de silos (esvazia o 1.º, depois o seguinte); bloqueada se não houver grão suficiente. Transferências verificam stock, espaço e grau.
-- **Inspecções dos silos:** temperatura, humidade, odor, infestação, com alertas e frequência definidos pela empresa.
+- **Monitorização da armazenagem (SOP-OPS-002 Rev 0.1):** estado de cada silo Verde / Verde-vigiar / Âmbar / Laranja / Vermelho / Emergência pelo pior parâmetro (humidade, temperatura por ponto, ΔT, odor/visual, insectos). Ronda em cada turno (07–19 e 19–07; 2 por turno em Âmbar), inspecção semanal do CQ, tratamentos, eventos com causa obrigatória, silo Vermelho retido até disposição escrita do CQ (com PIN), revisão de idade de armazenagem. Excel com Anexo A e Anexo B.
+- **Prioridade (humidade):** milho com 14,01–15,00 % e os restantes parâmetros dentro do Grau 1/2 vai para silos designados "Prioridade", com autorização (SOP-OPS-001 passo 5).
 - Correcções: "30.000" kg lido como 30 000 kg; números inválidos assinalados; lotes nunca sobrescritos; cópia automática antes de restaurar; ficheiros de cópia validados; aviso de cópia de segurança com mais de 7 dias; pesquisa de lotes.
 - **Nota:** as colunas do RG-21 exportado seguem o SOP e já não coincidem com o modelo RG-21 do kit.
 
@@ -63,7 +64,9 @@ A serverless phone app for **grain intake (RG-21)** and **silo and lot records (
 - Automatic grading from SOP-OPS-001 Rev 1.0 §7 (Grade 1, Grade 2, Off-grade, Reject). Fat is recorded, not graded. Abnormal odour or infestation → held for QC.
 - Silos have a fixed grain, colour, grade and capacity. Full silos can't be loaded; large loads split across silos in order.
 - Supervisor PIN for limits/silos, off-grade acceptance, different-grade silos and restores.
-- Discharge across silos in order; blocked when stock is short. Silo inspections with alerts.
+- Discharge across silos in order; blocked when stock is short.
+- Storage monitoring (SOP-OPS-002 Rev 0.1): per-silo status from the worst parameter; shift rounds per temperature point with ΔT; weekly QC moisture/insects; treatments; events that close only with a cause; Red silos held until a QC written disposition (PIN); storage-age review; Annex A/B in the Excel export.
+- Priority (moisture) designation for 14.01–15.00% maize that is otherwise Grade 1/2.
 - Fixes: thousands separators, no silent overwrites, safety copy before restore, backup validation, backup reminder, lot search.
 - Note: the exported RG-21 columns now follow the SOP, not the kit's RG-21 template.
 

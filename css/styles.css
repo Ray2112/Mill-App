@@ -80,3 +80,15 @@ table.lim input{min-height:40px;font-size:15px;padding:0 6px}
 .search{margin-top:6px}
 .restorebox{border-top:1px solid var(--line);padding-top:10px}
 input[readonly]{background:#F1EEE6;color:var(--muted)}
+/* v0.2.0 — armazenagem / storage status (SOP-OPS-002) */
+.lv0{background:#1F6B3A}.lv1{background:#4F8A3C}.lv2{background:#C98A00;color:#1D2125}.lv3{background:#D2621B}.lv4{background:#A3261C}.lv5{background:#5E0B0B}
+.badge.lv2{color:#1D2125}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle;flex:none}
+.drivers{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
+.drv{display:inline-flex;align-items:center}
+.decision .drv{color:#fff}
+.holdbar{background:#A3261C;color:#fff;border-radius:10px;padding:10px 12px;margin:0;font-weight:600;font-size:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pt{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}
+.big2 .badge{font-size:11px;vertical-align:middle;margin-left:4px}

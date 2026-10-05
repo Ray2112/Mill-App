@@ -1,6 +1,6 @@
 /* Service worker: guarda a aplicação no telemóvel para funcionar sem rede.
    Alterar CACHE quando publicar uma nova versão. / Bump CACHE on each release. */
-const CACHE = 'moagem-v0.2.0';
+const CACHE = 'moagem-v0.2.0-b';
 const FILES = [
   './', './index.html', './manifest.webmanifest', './css/styles.css',
   './js/i18n.js', './js/logic.js', './js/db.js', './js/app.js', './vendor/xlsx.mini.min.js',
