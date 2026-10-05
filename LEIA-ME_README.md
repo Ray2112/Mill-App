@@ -1,10 +1,20 @@
-# Moagem — Registos (v0.1.1, Fase A)
+# Moagem — Registos (v0.2.0, Fase A)
 
 Aplicação para telemóvel, sem servidor, para **recepção de cereal (RG-21)** e **registo de silos e lotes (RG-13)** numa moagem. Funciona sem rede depois da primeira abertura. Os dados ficam **apenas no telemóvel**.
 
 *English version below.*
 
 ---
+
+## Novidades na v0.2.0
+- **Cereal:** milho, trigo ou arroz. O milho exige a cor (Amarelo / Branco).
+- **Classificação automática (SOP-OPS-001 Rev 1.0, §7):** humidade, matérias estranhas, grãos partidos, grãos doentes/com bolor e peso específico → Grau 1, Grau 2, Fora de grau ou Rejeitar. Gordura é registada mas não classifica. Odor anormal ou infestação → retido até decisão do CQ. Valores entre graus → grau inferior.
+- **Silos designados** (cereal, cor, grau) e com capacidade. A aplicação mostra os silos livres para o grau do lote; um lote maior do que o espaço livre reparte-se pelos silos escolhidos, por ordem. Silo cheio não recebe. Amarelo e Branco nunca se misturam.
+- **PIN do supervisor** para: alterar limites e silos, aceitar fora de grau, usar silo de grau diferente (com nome e motivo registados) e restaurar cópias. Rejeitar não tem excepção.
+- **Descarga** por ordem de silos (esvazia o 1.º, depois o seguinte); bloqueada se não houver grão suficiente. Transferências verificam stock, espaço e grau.
+- **Inspecções dos silos:** temperatura, humidade, odor, infestação, com alertas e frequência definidos pela empresa.
+- Correcções: "30.000" kg lido como 30 000 kg; números inválidos assinalados; lotes nunca sobrescritos; cópia automática antes de restaurar; ficheiros de cópia validados; aviso de cópia de segurança com mais de 7 dias; pesquisa de lotes.
+- **Nota:** as colunas do RG-21 exportado seguem o SOP e já não coincidem com o modelo RG-21 do kit.
 
 ## O que faz
 - **Recepção:** novo lote com código automático `REC-AAMMDD-NN`, análises (humidade, impurezas, insectos, odor, aflatoxinas, DON, fumonisinas) e decisão automática ACEITAR / RETER / REJEITAR com o motivo.
@@ -44,9 +54,18 @@ Altere `const CACHE = 'moagem-v0.1.0'` em `sw.js` (por exemplo para `v0.1.1`) e 
 
 ---
 
-# Mill — Records (v0.1.1, Step A) — English
+# Mill — Records (v0.2.0, Step A) — English
 
 A serverless phone app for **grain intake (RG-21)** and **silo and lot records (RG-13)**. It works offline after the first load. Data stays **on the phone only**.
+
+## New in v0.2.0
+- Grain dropdown (maize, wheat, rice); maize colour (Amarelo/Branco) required.
+- Automatic grading from SOP-OPS-001 Rev 1.0 §7 (Grade 1, Grade 2, Off-grade, Reject). Fat is recorded, not graded. Abnormal odour or infestation → held for QC.
+- Silos have a fixed grain, colour, grade and capacity. Full silos can't be loaded; large loads split across silos in order.
+- Supervisor PIN for limits/silos, off-grade acceptance, different-grade silos and restores.
+- Discharge across silos in order; blocked when stock is short. Silo inspections with alerts.
+- Fixes: thousands separators, no silent overwrites, safety copy before restore, backup validation, backup reminder, lot search.
+- Note: the exported RG-21 columns now follow the SOP, not the kit's RG-21 template.
 
 ## Features
 - **Intake:** auto lot code, tests, and an automatic ACCEPT / HOLD / REJECT decision with the reasons.
